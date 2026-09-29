@@ -10,7 +10,7 @@ const deleteUser = require('./rest/deleteUser');
 
 const app = express();
 const PORT = process.env.PORT || 4000;
-const isProduction = process.env.NODE_ENV === 'production';
+const isDevelopment = process.env.NODE_ENV === 'development';
 
 app.use(cors());
 app.use(express.json());
@@ -22,12 +22,12 @@ app.put('/api/users/:id', updateUser);
 app.delete('/api/users/:id', deleteUser);
 
 async function startServer() {
-	if (isProduction) {
-		app.use(express.static(path.join(__dirname, 'dist')));
-	} else {
+	if (isDevelopment) {
 		const { createServer } = await import('vite');
 		const vite = await createServer({ server: { middlewareMode: true } });
 		app.use(vite.middlewares);
+	} else {
+		app.use(express.static(path.join(__dirname, 'dist')));
 	}
 
 	app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
