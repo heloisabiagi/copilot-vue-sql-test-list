@@ -6,7 +6,7 @@
     </div>
     <div class="form-field">
       <label for="email">Email</label>
-      <input id="email" v-model="email" placeholder="Email" required />
+      <input id="email" v-model="email" type="email" pattern="[^\s@]+@[^\s@.]+(\.[^\s@.]+)+" title="Enter an email address in the format name@example.com" placeholder="Email" required />
     </div>
     <div class="form-field">
       <label for="age">Age</label>
