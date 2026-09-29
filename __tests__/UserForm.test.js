@@ -12,6 +12,28 @@ describe('UserForm SFC (mounted)', () => {
     expect(wrapper.find('label[for="age"]').text()).toBe('Age');
   });
 
+  test('accepts email addresses with a dotted domain', async () => {
+    const wrapper = mount(UserForm);
+    const emailInput = wrapper.find('input[placeholder="Email"]');
+
+    await emailInput.setValue('person@example.com');
+
+    expect(emailInput.element.type).toBe('email');
+    expect(emailInput.element.checkValidity()).toBe(true);
+  });
+
+  test.each(['person@example', 'person@.com', 'person@example.'])(
+    'rejects invalid email address %s',
+    async (email) => {
+      const wrapper = mount(UserForm);
+      const emailInput = wrapper.find('input[placeholder="Email"]');
+
+      await emailInput.setValue(email);
+
+      expect(emailInput.element.checkValidity()).toBe(false);
+    }
+  );
+
   test('submitting form emits trimmed payload', async () => {
     const wrapper = mount(UserForm);
     const nameInput = wrapper.find('input[placeholder="Name"]');
