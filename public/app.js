@@ -1,6 +1,6 @@
-import { createApp } from 'https://unpkg.com/vue@3/dist/vue.esm-browser.js';
-import UserForm from './components/UserForm.js';
-import UserList from './components/UserList.js';
+import { createApp } from 'vue';
+import UserForm from './components/UserForm.vue';
+import UserList from './components/UserList.vue';
 
 createApp({
   components: { UserForm, UserList },
