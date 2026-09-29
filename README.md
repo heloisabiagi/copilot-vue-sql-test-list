@@ -1,8 +1,9 @@
 # Creating a User listing AI app with different agents
 
-This project is part of my experimentation with AI Agents (Copilot, Claude etc) creating a simple RESTful Users list with Vue.js, Unit tests and some pre-commit hooks. It demonstrates a minimal Express REST API with a Vue frontend that stores users in a local SQLite database. In this specific repository, I'll be using mostly Copilot.
+This project is part of my experimentation with AI Agents (Copilot, Claude etc) creating a simple RESTful Users list with Vue.js, Unit tests and some pre-commit hooks. It demonstrates a minimal Express REST API with a Vue frontend that stores users in a local SQLite database. In this specific repository, I'll be using mostly Copilot. You can see my experiment with Claude [in this repo](https://github.com/heloisabiagi/claude-vue-sql-test-list).
 
 This project is loosely based on this [YouTube video tutorial](https://www.youtube.com/watch?v=wlpBCazAY9Q&t=377s), but I'm adding my personal preferences.
+
 
 ## Development status
 
