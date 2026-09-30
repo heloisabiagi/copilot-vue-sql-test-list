@@ -16,21 +16,21 @@ createApp({
       this.users = await res.json();
     },
     async handleSubmit(payload) {
-      const { id, name, email, age } = payload;
+      const { id, name, email, age, country } = payload;
       const rawAge = age === undefined || age === null ? '' : String(age).trim();
       const parsedAge = Number(rawAge);
-      if (!name || !email || rawAge === '' || !Number.isFinite(parsedAge)) return;
+      if (!name || !email || !country || rawAge === '' || !Number.isFinite(parsedAge)) return;
       if (id) {
         await fetch(`/api/users/${id}`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ name, email, age: parsedAge })
+          body: JSON.stringify({ name, email, age: parsedAge, country })
         });
       } else {
         await fetch('/api/users', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ name, email, age: parsedAge })
+          body: JSON.stringify({ name, email, age: parsedAge, country })
         });
       }
       this.editingUser = null;

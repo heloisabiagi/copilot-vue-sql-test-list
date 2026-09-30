@@ -11,7 +11,8 @@ db.serialize(() => {
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       name TEXT NOT NULL,
       email TEXT NOT NULL UNIQUE,
-      age INTEGER
+      age INTEGER,
+      country TEXT NOT NULL DEFAULT ''
     )
   `);
 
@@ -20,6 +21,10 @@ db.serialize(() => {
     const hasAge = rows.some((row) => row.name === 'age');
     if (!hasAge) {
       db.run('ALTER TABLE users ADD COLUMN age INTEGER');
+    }
+    const hasCountry = rows.some((row) => row.name === 'country');
+    if (!hasCountry) {
+      db.run("ALTER TABLE users ADD COLUMN country TEXT NOT NULL DEFAULT ''");
     }
   });
 });

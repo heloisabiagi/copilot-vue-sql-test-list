@@ -7,9 +7,22 @@ describe('UserForm SFC (mounted)', () => {
     expect(wrapper.find('label[for="name"]').exists()).toBe(true);
     expect(wrapper.find('label[for="email"]').exists()).toBe(true);
     expect(wrapper.find('label[for="age"]').exists()).toBe(true);
+    expect(wrapper.find('label[for="country"]').exists()).toBe(true);
     expect(wrapper.find('label[for="name"]').text()).toBe('Name');
     expect(wrapper.find('label[for="email"]').text()).toBe('Email');
     expect(wrapper.find('label[for="age"]').text()).toBe('Age');
+    expect(wrapper.find('label[for="country"]').text()).toBe('Country');
+  });
+
+  test('offers all countries in a required selector', () => {
+    const wrapper = mount(UserForm);
+    const countrySelect = wrapper.find('select#country');
+    const options = countrySelect.findAll('option');
+
+    expect(countrySelect.element.required).toBe(true);
+    expect(options).toHaveLength(251);
+    expect(countrySelect.find('option[value="Afghanistan"]').exists()).toBe(true);
+    expect(countrySelect.find('option[value="Zimbabwe"]').exists()).toBe(true);
   });
 
   test('accepts email addresses with a dotted domain', async () => {
@@ -39,13 +52,15 @@ describe('UserForm SFC (mounted)', () => {
     const nameInput = wrapper.find('input[placeholder="Name"]');
     const emailInput = wrapper.find('input[placeholder="Email"]');
     const ageInput = wrapper.find('input[placeholder="Age"]');
+    const countryInput = wrapper.find('select#country');
     await nameInput.setValue(' Alice ');
     await emailInput.setValue(' a@b.com ');
     await ageInput.setValue('31');
+    await countryInput.setValue('Canada');
     await wrapper.find('form').trigger('submit.prevent');
     const emitted = wrapper.emitted('submit');
     expect(emitted).toBeTruthy();
-    expect(emitted[0][0]).toEqual({ id: null, name: 'Alice', email: 'a@b.com', age: 31 });
+    expect(emitted[0][0]).toEqual({ id: null, name: 'Alice', email: 'a@b.com', age: 31, country: 'Canada' });
   });
 
   test('cancel button emits cancel when editing', async () => {

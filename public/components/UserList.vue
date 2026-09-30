@@ -4,7 +4,7 @@
     <ul v-else class="list">
       <li v-for="user in users" :key="user.id">
         <div>
-          <strong>{{ user.name }}</strong> — {{ user.email }} — Age: {{ user.age ?? 'N/A' }}
+          <strong>{{ user.name }}</strong> — {{ user.email }} — Age: {{ user.age ?? 'N/A' }} — Country: {{ user.country }}
         </div>
         <div>
           <button class="edit" @click="$emit('edit', user)">Edit</button>

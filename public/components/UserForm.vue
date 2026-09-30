@@ -12,6 +12,15 @@
       <label for="age">Age</label>
       <input id="age" v-model="age" type="number" min="0" placeholder="Age" required />
     </div>
+    <div class="form-field">
+      <label for="country">Country</label>
+      <select id="country" v-model="country" required>
+        <option value="" disabled>Select a country</option>
+        <option v-for="countryOption in countryOptions" :key="countryOption.code" :value="countryOption.name">
+          {{ countryOption.name }}
+        </option>
+      </select>
+    </div>
     <div class="form-actions">
       <button type="submit">{{ editingId ? 'Save' : 'Add User' }}</button>
       <button type="button" v-if="editingId" @click="onCancel">Cancel</button>
@@ -20,10 +29,19 @@
 </template>
 
 <script>
+import countries from 'i18n-iso-countries';
+import englishLocale from 'i18n-iso-countries/langs/en.json';
+
+countries.registerLocale(englishLocale);
+
+const countryOptions = Object.entries(countries.getNames('en'))
+  .map(([code, name]) => ({ code, name }))
+  .sort((first, second) => first.name.localeCompare(second.name, 'en'));
+
 export default {
   props: { userToEdit: { type: Object, default: null } },
   data() {
-    return { name: '', email: '', age: '', editingId: null };
+    return { name: '', email: '', age: '', country: '', countryOptions, editingId: null };
   },
   watch: {
     userToEdit: {
@@ -34,11 +52,13 @@ export default {
           this.name = u.name;
           this.email = u.email;
           this.age = u.age ?? '';
+          this.country = u.country ?? '';
         } else {
           this.editingId = null;
           this.name = '';
           this.email = '';
           this.age = '';
+          this.country = '';
         }
       }
     }
@@ -51,7 +71,8 @@ export default {
         id: this.editingId,
         name: this.name.trim(),
         email: this.email.trim(),
-        age: rawAge !== '' && Number.isFinite(parsedAge) ? parsedAge : null
+        age: rawAge !== '' && Number.isFinite(parsedAge) ? parsedAge : null,
+        country: this.country.trim()
       });
     },
     onCancel() {
