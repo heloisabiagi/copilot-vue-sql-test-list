@@ -16,25 +16,37 @@ createApp({
       this.users = await res.json();
     },
     async handleSubmit(payload) {
-      const { id, name, email, age } = payload;
+      const { id, name, email, age, country } = payload;
       const rawAge = age === undefined || age === null ? '' : String(age).trim();
       const parsedAge = Number(rawAge);
-      if (!name || !email || rawAge === '' || !Number.isFinite(parsedAge)) return;
-      if (id) {
-        await fetch(`/api/users/${id}`, {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ name, email, age: parsedAge })
-        });
-      } else {
-        await fetch('/api/users', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ name, email, age: parsedAge })
-        });
+      if (!name || !email || !country || rawAge === '' || !Number.isFinite(parsedAge)) return;
+      let response;
+      try {
+        if (id) {
+          response = await fetch(`/api/users/${id}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name, email, age: parsedAge, country })
+          });
+        } else {
+          response = await fetch('/api/users', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name, email, age: parsedAge, country })
+          });
+        }
+      } catch (error) {
+        console.error('Failed to save user:', error);
+        return;
       }
+
+      if (!response.ok) {
+        console.error('Failed to save user:', response.status, response.statusText);
+        return;
+      }
+
       this.editingUser = null;
-      this.fetchUsers();
+      await this.fetchUsers();
     },
     editUser(user) {
       this.editingUser = user;
