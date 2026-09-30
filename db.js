@@ -4,31 +4,6 @@ const sqlite3 = require('sqlite3').verbose();
 const dbFile = path.join(__dirname, 'database.sqlite');
 const db = new sqlite3.Database(dbFile);
 
-// Initialize schema
-db.serialize(() => {
-  db.run(`
-    CREATE TABLE IF NOT EXISTS users (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      name TEXT NOT NULL,
-      email TEXT NOT NULL UNIQUE,
-      age INTEGER,
-      country TEXT NOT NULL DEFAULT ''
-    )
-  `);
-
-  db.all('PRAGMA table_info(users)', (err, rows) => {
-    if (err) return;
-    const hasAge = rows.some((row) => row.name === 'age');
-    if (!hasAge) {
-      db.run('ALTER TABLE users ADD COLUMN age INTEGER');
-    }
-    const hasCountry = rows.some((row) => row.name === 'country');
-    if (!hasCountry) {
-      db.run("ALTER TABLE users ADD COLUMN country TEXT NOT NULL DEFAULT ''");
-    }
-  });
-});
-
 function run(sql, params = []) {
   return new Promise((resolve, reject) => {
     db.run(sql, params, function (err) {
@@ -56,4 +31,36 @@ function all(sql, params = []) {
   });
 }
 
-module.exports = { run, get, all };
+const ready = new Promise((resolve, reject) => {
+  db.serialize(() => {
+    db.run(`
+      CREATE TABLE IF NOT EXISTS users (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT NOT NULL,
+        email TEXT NOT NULL UNIQUE,
+        age INTEGER,
+        country TEXT NOT NULL DEFAULT ''
+      )
+    `, (createError) => {
+      if (createError) return reject(createError);
+
+      db.all('PRAGMA table_info(users)', (schemaError, rows) => {
+        if (schemaError) return reject(schemaError);
+
+        const columns = new Set(rows.map((row) => row.name));
+        const migrations = [];
+        if (!columns.has('age')) migrations.push('ALTER TABLE users ADD COLUMN age INTEGER');
+        if (!columns.has('country')) {
+          migrations.push("ALTER TABLE users ADD COLUMN country TEXT NOT NULL DEFAULT ''");
+        }
+
+        migrations.reduce(
+          (previous, migration) => previous.then(() => run(migration)),
+          Promise.resolve()
+        ).then(resolve, reject);
+      });
+    });
+  });
+});
+
+module.exports = { ready, run, get, all };

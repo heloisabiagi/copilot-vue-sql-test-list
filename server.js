@@ -2,6 +2,7 @@ const express = require('express');
 const path = require('path');
 const cors = require('cors');
 
+const db = require('./db');
 const listUsers = require('./rest/listUsers');
 const getUser = require('./rest/getUser');
 const createUser = require('./rest/createUser');
@@ -22,6 +23,8 @@ app.put('/api/users/:id', updateUser);
 app.delete('/api/users/:id', deleteUser);
 
 async function startServer() {
+	await db.ready;
+
 	if (isDevelopment) {
 		const { createServer } = await import('vite');
 		const vite = await createServer({ server: { middlewareMode: true } });
@@ -33,4 +36,7 @@ async function startServer() {
 	app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
 }
 
-startServer();
+startServer().catch((error) => {
+	console.error('Failed to start server:', error);
+	process.exitCode = 1;
+});
