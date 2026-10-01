@@ -74,4 +74,9 @@ describe('UserForm SFC (mounted)', () => {
     await wrapper.find('button[type="button"]').trigger('click');
     expect(wrapper.emitted('cancel')).toBeTruthy();
   });
+
+  test('disables cancel while saving', () => {
+    const wrapper = mount(UserForm, { props: { saving: true } });
+    expect(wrapper.find('button[type="button"]').element.disabled).toBe(true);
+  });
 });

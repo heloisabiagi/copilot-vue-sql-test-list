@@ -23,7 +23,7 @@
     </div>
     <div class="form-actions">
       <button type="submit" :disabled="saving">Save</button>
-      <button type="button" @click="onCancel">Cancel</button>
+      <button type="button" :disabled="saving" @click="onCancel">Cancel</button>
     </div>
   </form>
 </template>

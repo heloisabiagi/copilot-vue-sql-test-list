@@ -5,7 +5,7 @@ import UserList from './components/UserList.vue';
 createApp({
   components: { UserForm, UserList },
   data() {
-    return { users: [], editingUser: null, isUserModalOpen: false, isSaving: false };
+    return { users: [], editingUser: null, isUserModalOpen: false, isSaving: false, userModalSession: 0 };
   },
   mounted() {
     this.fetchUsers();
@@ -21,6 +21,7 @@ createApp({
       const rawAge = age === undefined || age === null ? '' : String(age).trim();
       const parsedAge = Number(rawAge);
       if (!name || !email || !country || rawAge === '' || !Number.isFinite(parsedAge)) return;
+      const saveSession = this.userModalSession;
       let response;
       this.isSaving = true;
       try {
@@ -49,19 +50,25 @@ createApp({
         return;
       }
 
-      this.editingUser = null;
-      this.isUserModalOpen = false;
+      if (this.isUserModalOpen && this.userModalSession === saveSession) {
+        this.editingUser = null;
+        this.isUserModalOpen = false;
+      }
       await this.fetchUsers();
     },
     startAddUser() {
+      this.userModalSession += 1;
       this.editingUser = null;
       this.isUserModalOpen = true;
     },
     editUser(user) {
+      this.userModalSession += 1;
       this.editingUser = user;
       this.isUserModalOpen = true;
     },
     cancelEdit() {
+      if (this.isSaving) return;
+      this.userModalSession += 1;
       this.editingUser = null;
       this.isUserModalOpen = false;
     },
