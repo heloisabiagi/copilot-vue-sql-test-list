@@ -23,6 +23,10 @@ This project is loosely based on this [YouTube video tutorial](https://www.youtu
 - I've added Code Rabbit to the Github repository and created 2 PRs with simple changes. The first one was ok, the second one, in which I'm changing the name of the labels without updating the tests, was intended to be broken.
 - As expected, in the [second PR](https://github.com/heloisabiagi/agentic-ai-vue-test-list/pull/2), the CI tests failed, and the issue was also captured by Code Rabbit - which proactively fixed the issue.
 
+### Log 4: moving all the components to an SFC
+- When I asked Copilot to break the generated HTML into components, it has created redundant .js and .vue files for each components to make compilation easier, although that's sketchy. I've asked it to use only a single file per component, which required Vite builds. It took Copilot some time to do it and last time it crashed in an attempt, but this time things went successful
+
+
 
 --------------------------------------
 
