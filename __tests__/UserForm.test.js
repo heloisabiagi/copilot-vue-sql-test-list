@@ -68,4 +68,10 @@ describe('UserForm SFC (mounted)', () => {
     await wrapper.find('button[type="button"]').trigger('click');
     expect(wrapper.emitted('cancel')).toBeTruthy();
   });
+
+  test('cancel button is available when adding a user', async () => {
+    const wrapper = mount(UserForm);
+    await wrapper.find('button[type="button"]').trigger('click');
+    expect(wrapper.emitted('cancel')).toBeTruthy();
+  });
 });

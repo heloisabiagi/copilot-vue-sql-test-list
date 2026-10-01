@@ -22,8 +22,8 @@
       </select>
     </div>
     <div class="form-actions">
-      <button type="submit">{{ editingId ? 'Save' : 'Add User' }}</button>
-      <button type="button" v-if="editingId" @click="onCancel">Cancel</button>
+      <button type="submit" :disabled="saving">Save</button>
+      <button type="button" @click="onCancel">Cancel</button>
     </div>
   </form>
 </template>
@@ -39,7 +39,10 @@ const countryOptions = Object.entries(countries.getNames('en'))
   .sort((first, second) => first.name.localeCompare(second.name, 'en'));
 
 export default {
-  props: { userToEdit: { type: Object, default: null } },
+  props: {
+    userToEdit: { type: Object, default: null },
+    saving: { type: Boolean, default: false }
+  },
   data() {
     return { name: '', email: '', age: '', country: '', countryOptions, editingId: null };
   },

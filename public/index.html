@@ -8,9 +8,17 @@
 </head>
 <body>
   <div id="app" class="container">
-    <h1>Users</h1>
+    <header class="page-header">
+      <h1>Users</h1>
+      <button class="add-user" type="button" @click="startAddUser">Add User</button>
+    </header>
 
-    <user-form :user-to-edit="editingUser" @submit="handleSubmit" @cancel="cancelEdit"></user-form>
+    <div v-if="isUserModalOpen" class="modal-backdrop">
+      <section class="user-modal" role="dialog" aria-modal="true" aria-labelledby="user-modal-title">
+        <h2 id="user-modal-title">{{ editingUser ? 'Edit User' : 'Add User' }}</h2>
+        <user-form :user-to-edit="editingUser" :saving="isSaving" @submit="handleSubmit" @cancel="cancelEdit"></user-form>
+      </section>
+    </div>
 
     <user-list :users="users" @edit="editUser" @delete="removeUser"></user-list>
   </div>
