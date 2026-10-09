@@ -15,6 +15,7 @@ module.exports = async (req, res) => {
     const user = await db.get('SELECT id, name, email, age, country FROM users WHERE id = ?', [result.id]);
     res.status(201).json(user);
   } catch (err) {
+    if (db.isDuplicateEmailError(err)) return res.status(409).json({ error: 'Email already in use' });
     res.status(500).json({ error: err.message });
   }
 };

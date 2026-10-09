@@ -11,10 +11,12 @@ module.exports = async (req, res) => {
   }
 
   try {
-    await db.run('UPDATE users SET name = ?, email = ?, age = ?, country = ? WHERE id = ?', [name, email, parsedAge, country, req.params.id]);
+    const result = await db.run('UPDATE users SET name = ?, email = ?, age = ?, country = ? WHERE id = ?', [name, email, parsedAge, country, req.params.id]);
+    if (result.changes === 0) return res.status(404).json({ error: 'User not found' });
     const user = await db.get('SELECT id, name, email, age, country FROM users WHERE id = ?', [req.params.id]);
     res.json(user);
   } catch (err) {
+    if (db.isDuplicateEmailError(err)) return res.status(409).json({ error: 'Email already in use' });
     res.status(500).json({ error: err.message });
   }
 };

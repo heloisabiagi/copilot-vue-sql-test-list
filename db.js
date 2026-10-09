@@ -1,7 +1,7 @@
 const path = require('path');
 const sqlite3 = require('sqlite3').verbose();
 
-const dbFile = path.join(__dirname, 'database.sqlite');
+const dbFile = process.env.DB_FILE || path.join(__dirname, 'database.sqlite');
 const db = new sqlite3.Database(dbFile);
 
 function run(sql, params = []) {
@@ -63,4 +63,8 @@ const ready = new Promise((resolve, reject) => {
   });
 });
 
-module.exports = { ready, run, get, all };
+function isDuplicateEmailError(err) {
+  return err.code === 'SQLITE_CONSTRAINT' && err.message.includes('users.email');
+}
+
+module.exports = { ready, run, get, all, isDuplicateEmailError };
