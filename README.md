@@ -26,7 +26,12 @@ This project is loosely based on this [YouTube video tutorial](https://www.youtu
 ### Log 4: moving all the components to an SFC
 - When I asked Copilot to break the generated HTML into components, it has created redundant .js and .vue files for each components to make compilation easier, although that's sketchy. I've asked it to use only a single file per component, which required Vite builds. It took Copilot some time to do it and last time it crashed in an attempt, but this time things went successful
 
-
+### Log 5: adding API integration tests
+- So far, I'd been using exclusively Copilot in this repository, but for API integration tests, I've decided to test Claude and Copilot and ask them to do the same task, adding Integration Tests to the API requests.
+- First I've discussed a plan with both agents with the prompt `I'd like to add some integration tests to my application. What tests should I add? Don't do anything yet.`
+- Copilot's suggestions prioritized breadth, making a full plan to test API Integration, UI-to-API workflow tests and End to End tests, while Claude limited the plan to API Integrations, but delivered a more in-depth plan which included more test cases for the API requests and also suggesting fixes for the API responses. Both agents suggested using Supertest for sending the requests.
+- Although I've stuck with Claude's implementation as it covered more cases, had better readability (with tests for each endpoint put in different files) and also improved the API responses, I was positively surprised with Copilot's suggestion.
+- [MR with API integration tests](https://github.com/heloisabiagi/copilot-vue-sql-test-list/pull/8) by Claude and [MR with API integration tests](https://github.com/heloisabiagi/copilot-vue-sql-test-list/pull/9/changes) by Copilot 
 
 --------------------------------------
 
