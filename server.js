@@ -33,19 +33,10 @@ async function startServer() {
 		app.use(express.static(path.join(__dirname, 'dist')));
 	}
 
-	return new Promise((resolve) => {
-		const server = app.listen(PORT, () => {
-			console.log(`Server running on http://localhost:${PORT}`);
-			resolve(server);
-		});
-	});
+	app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
 }
 
-if (require.main === module) {
-	startServer().catch((error) => {
-		console.error('Failed to start server:', error);
-		process.exitCode = 1;
-	});
-}
-
-module.exports = { app, startServer };
+startServer().catch((error) => {
+	console.error('Failed to start server:', error);
+	process.exitCode = 1;
+});
