@@ -6,7 +6,8 @@
     "start": "npm run build && NODE_ENV=production node server.js",
     "dev": "NODE_ENV=development nodemon server.js",
     "build": "vite build",
-    "test": "jest"
+    "test": "jest",
+    "test:integration": "jest --runInBand __tests__/api"
   },
   "dependencies": {
     "cors": "^2.8.5",
