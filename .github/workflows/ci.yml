@@ -25,5 +25,8 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Run API integration tests
+        run: npm run test:integration -- --silent
+
       - name: Run tests
         run: npm test --silent
