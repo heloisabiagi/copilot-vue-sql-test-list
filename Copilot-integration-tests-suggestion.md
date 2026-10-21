@@ -31,7 +31,7 @@ These should hit the real Express routes in server.js and use the real SQLite da
 `DELETE /api/users/:id removes the record`
 - following GET returns 404
 
-###Validation failures
+### Validation failures
 
 - missing name/email/country/age returns 400
 - invalid age like "abc" or blank string is rejected
